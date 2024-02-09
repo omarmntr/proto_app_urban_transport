@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<node id="1225631238" lat="8.2727347" lon="-62.7806003" version="4" timestamp="2019-03-22T14:06:22Z" changeset="68412682" uid="5443883" user="Wilmer Osario">
+    <tag k="bus" v="yes"/>
+    <tag k="name" v="2° de El Guamo"/>
+    <tag k="public_transport" v="stop_position"/>
+  </node>
