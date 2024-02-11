@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Saloon\XmlWrangler\XmlReader;
+use App\Models\Stop;
+use MatanYadaev\EloquentSpatial\Objects\Point;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,13 +74,21 @@ out;';
 
 
 Route::get('/test-2', function () {
-    $xml = simplexml_load_file("");
+    //try {
+    $xml = simplexml_load_file(__DIR__.'\file.xml');
 
-    foreach($xml->xpath("//way") AS $way){
-        $via = $way->xpath("tag[@k='name']/@v")[0];
-        foreach($way->nd AS $nd){
-            $idnode = $nd["ref"];
-            echo $idnode .", ". $via  ."<br>";
-        }
+    foreach($xml->xpath('//node[tag[@k = "bus" and @v="yes"] | tag[@k="name"] | tag[@k="public_transport" and @v="stop_position"]]') AS $node){
+        
+        $stop = new Stop();
+        $stop->location = new Point((float) $node['lat'][0], (float) $node['lon'][0]);
+        $stop->name = (string) $node->xpath('tag[@k="name"]/@v')[0];
+        
+        $stop->save();
+
+        return $stop->location->getCoordinates();
+        
     }
+    /*} catch (\Exception $e) {
+        return $e->getTrace();
+    }*/
 });
