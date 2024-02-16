@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Saloon\XmlWrangler\XmlReader;
 use App\Models\Stop;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 
