@@ -19,6 +19,42 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
+    function atStart() {
+        
+    }
+
+    function renderAllStops() {
+        
+    }
+
+    function  calculateOptimalRoute(){
+
+    }
+
+    function renderoptimalRoute() {
+        
+    }
+
+    function clearInfo(){
+
+    }
+
+    function selectFirstStop(){
+
+    }
+
+    function selectLastStop(){
+
+    }
+
+    function clearFirstStop(){
+
+    }
+
+    function clearLastStop(){
+        
+    }
+
 </script>
 </body>
 <style>
