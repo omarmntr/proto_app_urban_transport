@@ -33,7 +33,7 @@ Route::get('/test-1', function () {
     }
 
 });
-Route::get('/test-1', function () {
+Route::get('/test-n', function () {
 
     $query = 'node
 ["amenity"~".*"]
@@ -72,19 +72,26 @@ out;';
 });
 
 
-Route::get('/test-2', function () {
+Route::post('/test-2', function () {
+    //dd("test-2");
     //try {
-    $xml = simplexml_load_file(__DIR__.'\file.xml');
+    $xml = simplexml_load_file(__DIR__.'\map.xml');
 
-    foreach($xml->xpath('//node[tag[@k = "bus" and @v="yes"] | tag[@k="name"] | tag[@k="public_transport" and @v="stop_position"]]') AS $node){
-        
-        $stop = new Stop();
-        $stop->location = new Point((float) $node['lat'][0], (float) $node['lon'][0]);
-        $stop->name = (string) $node->xpath('tag[@k="name"]/@v')[0];
-        
-        $stop->save();
+    $routes = $xml->xpath('//relation[tag[@k = "public_transport:version" and @v="2"]  | tag[@k="route" and @v="bus"] | tag[@k="type" and @v="route"]]');
 
-        return $stop->location->getCoordinates();
+    
+    foreach($routes as $routeIndex => $routeValue){
+        //dd("test 2");
+
+         dd(array($routeIndex, $routeValue));
+        
+        // $stop = new Stop();
+        // $stop->location = new Point((float) $node['lat'][0], (float) $node['lon'][0]);
+        // $stop->name = (string) $node->xpath('tag[@k="name"]/@v')[0];
+        
+        //$stop->save();
+
+        //return $stop->location->getCoordinates();
         
     }
     /*} catch (\Exception $e) {
