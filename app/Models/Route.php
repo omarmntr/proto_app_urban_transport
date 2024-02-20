@@ -4,17 +4,17 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
-use MatanYadaev\EloquentSpatial\Objects\Point;
-use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
+// use MatanYadaev\EloquentSpatial\Objects\Point;
+// use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 
 
-class Stop extends Model
+class Route extends Model
 {
 
-    use HasSpatial;
+    protected $table = 'routes';
+    protected $primaryKey = 'route_id';
 
-    protected $table = 'stops';
-    protected $primaryKey = 'stop_id';
+    //use HasSpatial;
 
     /**
      * The attributes that are mass assignable.
@@ -23,6 +23,7 @@ class Stop extends Model
      */
     protected $fillable = [
         'name',
+        'colour', //tag = colour
         'location',
     ];
 
