@@ -2,7 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Models\Stop;
+use App\Models\Stop as StopModel;
+use App\Models\Route as RouteModel;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 
 /*
@@ -20,70 +21,32 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/test-1', function () {
-    $xml = simplexml_load_file(__DIR__ . '\file.xml');
-    dd($xml->tag[2]);
-    foreach ($xml->node as $nodeIndex => $nodeValue) {
-        //dd($nodeValue);
-        if ($nodeValue->tag) {
-            foreach ($nodeValue->tag as $tagIndex => $tagValue) {
-
-            }
-        }
-    }
-
-});
-Route::get('/test-n', function () {
-
-    $query = 'node
-["amenity"~".*"]
-(38.415938460513274,16.06338500976562,39.52205163048525,17.51220703125);
-out;';
-
-    $context = stream_context_create([
-        'http' => [
-            'method' => 'POST',
-            'header' => ['Content-Type: application/x-www-form-urlencoded'],
-            'content' => 'data=' . urlencode($query),
-        ]
-    ]);
-
-    # please do not stress this service, this example is for demonstration purposes only.
-    $endpoint = 'http://overpass-api.de/api/interpreter';
-    libxml_set_streams_context($context);
-    $start = microtime(true);
-
-    $result = simplexml_load_file($endpoint);
-    printf("Query returned %2\$d node(s) and took %1\$.5f seconds.\n\n", microtime(true) - $start, count($result->node));
-
-    //
-// 2.) Work with the XML Result
-//
-
-    # get all school nodes with xpath
-    $xpath = '//node[tag[@k = "amenity" and @v = "school"]]';
-    $schools = $result->xpath($xpath);
-    printf("%d School(s) found:\n", count($schools));
-    foreach ($schools as $index => $school) {
-        # Get the name of the school (if any), again with xpath
-        list($name) = $school->xpath('tag[@k = "name"]/@v') + ['(unnamed)'];
-        printf("#%02d: ID:%' -10s  [%s,%s]  %s\n", $index, $school['id'], $school['lat'], $school['lon'], $name);
-    }
-});
-
-
-Route::post('/test-2', function () {
-    //dd("test-2");
-    //try {
+Route::post('test', function () {
+    try {
     $xml = simplexml_load_file(__DIR__.'\map.xml');
 
-    $routes = $xml->xpath('//relation[tag[@k = "public_transport:version" and @v="2"]  | tag[@k="route" and @v="bus"] | tag[@k="type" and @v="route"]]');
+    $routes = $xml->xpath('//relation[ tag[@k = "public_transport:version" and @v="2"]]');
+
+
 
     
     foreach($routes as $routeIndex => $routeValue){
-        //dd("test 2");
+        $route = new RouteModel();
 
-         dd(array($routeIndex, $routeValue));
+        if($route){
+            dd($routeValue);
+        }
+
+         //dd(array($routeIndex, $routeValue));
+        $route->name = (string) $routeValue->xpath('tag[@k="official_name"]/@v')[0];
+        $route->colour = (string) $routeValue->xpath('tag[@k="colour"]/@v')[0];
+
+        
+        if(){
+            dd($route);
+        }
+
+        //$route->save();
         
         // $stop = new Stop();
         // $stop->location = new Point((float) $node['lat'][0], (float) $node['lon'][0]);
@@ -94,7 +57,28 @@ Route::post('/test-2', function () {
         //return $stop->location->getCoordinates();
         
     }
-    /*} catch (\Exception $e) {
+    } catch (\Exception $e) {
         return $e->getTrace();
-    }*/
+    }
 });
+
+
+//     $query = 'node
+// ["amenity"~".*"]
+// (38.415938460513274,16.06338500976562,39.52205163048525,17.51220703125);
+// out;';
+
+//     $context = stream_context_create([
+//         'http' => [
+//             'method' => 'POST',
+//             'header' => ['Content-Type: application/x-www-form-urlencoded'],
+//             'content' => 'data=' . urlencode($query),
+//         ]
+//     ]);
+
+//     # please do not stress this service, this example is for demonstration purposes only.
+//     $endpoint = 'http://overpass-api.de/api/interpreter';
+//     libxml_set_streams_context($context);
+//     $start = microtime(true);
+
+//     $result = simplexml_load_file($endpoint);

@@ -22,14 +22,10 @@ class Route extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'name', //tag official_name
         'colour', //tag = colour
-        'location',
     ];
 
-    protected $casts = [
-        'location' => Point::class
-    ];
 
     public $timestamps = true;
 }
