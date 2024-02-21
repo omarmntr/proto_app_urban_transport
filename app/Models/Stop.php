@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class Stop extends Model
 {
@@ -32,4 +34,10 @@ class Stop extends Model
     ];
 
     public $timestamps = true;
+
+    
+    public function routeStop(): HasMany
+    {
+        return $this->hasMany(RouteStop::class,'route_id', 'route_id');
+    }
 }

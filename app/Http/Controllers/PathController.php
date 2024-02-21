@@ -3,19 +3,19 @@
 namespace App\Http\Controllers;
 
 use MatanYadaev\EloquentSpatial\Objects\Point;
-use App\Models\Stop;
+use App\Models\Path;
 
 
-class StopController extends Controller
+class PathController extends Controller
 {
         public function read(){
 
             try {
-                $stops = Stop::all();
+                $paths = Path::all();
 
                 $response = [   
-                    'data'    => $stops,
-                    'message' => "All stops",
+                    'data'    => $paths,
+                    'message' => "All paths",
                     'code' =>200
                 ];
             return response()->json($response, 200);
@@ -31,23 +31,23 @@ class StopController extends Controller
             
         }
 
-        public function readById($stop_id){
+        public function readById($path_id){
 
             try {
-                $stop = Stop::where('stop_id',$stop_id)->first();
-                    if(!$stop){
+                $path = Path::where('path_id',$path_id)->first();
+                    if(!$path){
 
                         $response = [   
                             'data'    => null,
-                            'message' => "Stop not found ",
+                            'message' => "path not found ",
                             'code' =>400
                         ];
                         return response()->json($response, 200);
                     }
                 
                 $response = [   
-                    'data'    => $stop,
-                    'message' => " stop id:$stop->stop_id - stop name:$stop->name ",
+                    'data'    => $path,
+                    'message' => " path id:$path->path_id",
                     'code' =>200
                 ];
                 return response()->json($response, 200);

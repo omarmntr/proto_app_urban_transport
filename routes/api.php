@@ -13,6 +13,12 @@ use App\Http\Controllers\OSMController;
  */
 use App\Http\Controllers\StopController;
 
+/**
+ * PATH CONTROLLER
+ */
+use App\Http\Controllers\PathController;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -43,3 +49,20 @@ Route::prefix('stop')->group(function () {
     Route::get('/{stop_id}', [StopController::class, 'readById']);
 });
 
+
+/**
+ * PATH ROUTES
+ */
+Route::prefix('path')->group(function () {
+    Route::get('', [PathController::class, 'read']);
+    Route::get('/{path_id}', [PathController::class, 'readById']);
+});
+
+
+/**
+ * ROUTE CALCULATE
+ */
+Route::prefix('calculate')->group(function () {
+    Route::get('route/{initilaStop}/{}}', [PathController::class, 'read']);
+    Route::get('/{path_id}', [PathController::class, 'readById']);
+});

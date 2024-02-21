@@ -3,11 +3,23 @@
 namespace App\Http\Controllers;
 
 use MatanYadaev\EloquentSpatial\Objects\Point;
+
+use App\Models\Route;
+
 use App\Models\Stop;
+use App\Models\RouteStop;
+
+use App\Models\Path;
+use App\Models\RoutePath;
 
 
-class StopController extends Controller
+class RouteController extends Controller
 {
+        public function calculateRoute($initialStop, $finalStop){
+
+            
+
+        }
         public function read(){
 
             try {

@@ -4,8 +4,9 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
-// use MatanYadaev\EloquentSpatial\Objects\Point;
-// use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
+
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 
 class RoutePath extends Model
@@ -30,4 +31,14 @@ class RoutePath extends Model
 
 
     public $timestamps = true;
+
+    public function route(): HasMany
+    {
+        return $this->hasMany(Route::class,'route_id', 'route_id');
+    }
+
+    public function path(): HasMany
+    {
+        return $this->hasManyThrough(Path::class,'path_id', 'path_id');
+    }
 }
