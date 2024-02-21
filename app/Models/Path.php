@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use MatanYadaev\EloquentSpatial\Objects\MultiPoint;
 use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 
 class Path extends Model
@@ -34,7 +34,7 @@ class Path extends Model
 
     public $timestamps = true;
 
-    public function routePath(): HasMany
+    public function routePath(): BelongsToMany
     {
         return $this->belongsToMany(RoutePath::class,'path_id', 'path_id');
     }
