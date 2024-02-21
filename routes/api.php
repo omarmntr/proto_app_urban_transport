@@ -51,6 +51,8 @@ Route::post('test', function () {
             $route->save();
 
 
+            /* STOP INSERT BEGIN */
+
             $stops = $routeValue->xpath('member[@type="node"]');
 
             foreach ($stops as $stopIndex => $stopValue) {
@@ -77,18 +79,46 @@ Route::post('test', function () {
 
             }
 
+            /* STOP INSERT END */
+
             // dd(array_reverse($stops));
 
-            $paths = $routeValue->xpath('member[@type="way"]');
+            /* PATH INSERT BEGIN */
 
-            foreach ($paths as $pathIndex => $pathValue) {
-                $path = $xml->xpath('node[@id="'.(string) $pathValue["ref"][0].'"]');
+            $ways = $routeValue->xpath('member[@type="way"]');
 
-                foreach ($path["nd"] as $ndIndex => $ndValue) {
-                    # code...
+            foreach ($ways as $wayIndex => $wayValue) {
+
+                $path = new PathModel();
+
+                $way = $xml->xpath('node[@id="'.(string) $wayValue["ref"][0].'"]');
+
+                $path->osm_id = (string) $wayValue[0]["id"][0];
+                $path->order = $wayIndex;
+
+                $coordinates = array();
+
+                foreach ($way["nd"] as $ndIndex => $ndValue) {
+                    $nodeWay = $xml->xpath('node[@id="'.(string) $ndValue["ref"][0].'"]');
+
+                    $coordinates[] = new Point((float) $nodeWay[0]['lat'][0], (float) $nodeWay[0]['lon'][0]);
+
                 }
 
+                $path->coordinates = new MultiPoint($coordinates);
+                $path->save();
+
+
+                $routePath = new RoutePathModel();
+
+                $routePath->route_id = $route->route_id;
+                $routePath->path_id = $path->path_id;
+                $routePath->order_path = $wayIndex;
+                $routePath->save();
+
             }
+
+            /* PATH INSERT END */
 
 
 
