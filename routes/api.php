@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -8,6 +8,7 @@ use App\Models\Path as PathModel;
 use App\Models\RouteStop as RouteStopModel;
 use App\Models\RoutePath as RoutePathModel;
 use MatanYadaev\EloquentSpatial\Objects\Point;
+use MatanYadaev\EloquentSpatial\Objects\MultiPoint;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('test', function () {
+
+     set_time_limit(300);
+
     try {
     $xml = simplexml_load_file(__DIR__.'\map.xml');
 
@@ -91,14 +95,20 @@ Route::post('test', function () {
 
                 $path = new PathModel();
 
-                $way = $xml->xpath('node[@id="'.(string) $wayValue["ref"][0].'"]');
+                //dd($wayValue["ref"][0]);
 
-                $path->osm_id = (string) $wayValue[0]["id"][0];
-                $path->order = $wayIndex;
+                $way = $xml->xpath('way[@id="'.(string) $wayValue["ref"][0].'"]');
+
+                //dd($way);
+
+                $path->osm_id = (string) $way[0]["id"][0];
 
                 $coordinates = array();
 
-                foreach ($way["nd"] as $ndIndex => $ndValue) {
+                $nd = $way[0]->xpath('nd');
+
+                foreach ($nd as $ndIndex => $ndValue) {
+
                     $nodeWay = $xml->xpath('node[@id="'.(string) $ndValue["ref"][0].'"]');
 
                     $coordinates[] = new Point((float) $nodeWay[0]['lat'][0], (float) $nodeWay[0]['lon'][0]);
@@ -107,6 +117,7 @@ Route::post('test', function () {
 
                 $path->coordinates = new MultiPoint($coordinates);
                 $path->save();
+
 
 
                 $routePath = new RoutePathModel();
@@ -137,10 +148,12 @@ Route::post('test', function () {
         //$stop->save();
 
         //return $stop->location->getCoordinates();
+
+        return "everything well done";
         
     }
     } catch (\Exception $e) {
-        return $e->getTrace();
+        return $e->getMessage();
     }
 });
 
