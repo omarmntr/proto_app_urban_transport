@@ -53,8 +53,27 @@
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-       
     
+    // var marcador = L.marker([8.2757, -62.7594]).addTo(map);
+    // var marcador2 = L.marker([8.2766, -62.7695]).addTo(map);
+    
+
+    // marcador1.bindPopup("<b>¡Hola!</b><br>Yo estoy aquí.").openPopup();
+    // marcador2.bindPopup("<b>¡Hola!</b><br>Yo estoy aquí.").openPopup();
+    
+
+    // var linea = L.polyline([
+    // [8.2757, -62.7594], // Coordenadas del marcador1
+    // [8.2766, -62.7695], // Coordenadas del marcador2
+    
+// ]).addTo(map);
+
+        function onMapClick(e) {
+            var marker = L.marker(e.latlng).addTo(map); // Agrega un marcador en la ubicación del clic
+        }
+
+        map.on('click', onMapClick); // Agrega el evento de clic al mapa
+
     function resetFunction1() {
             // Aquí va el código para limpiar la función del Botón 1
         }
