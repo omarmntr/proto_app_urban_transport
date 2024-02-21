@@ -4,6 +4,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Stop as StopModel;
 use App\Models\Route as RouteModel;
+use App\Models\Path as PathModel;
+use App\Models\RouteStop as RouteStopModel;
+use App\Models\RoutePath as RoutePathModel;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 
 /*
@@ -26,15 +29,17 @@ Route::post('test', function () {
     $xml = simplexml_load_file(__DIR__.'\map.xml');
 
     $routes = $xml->xpath('//relation[ tag[@k = "public_transport:version" and @v="2"]]');
-
-
-
-    
+   
     foreach($routes as $routeIndex => $routeValue){
         $route = new RouteModel();
 
        //dd(array($routeIndex, $routeValue));
-       
+
+    //    dd($route->where("osm_id",'=',(string) $routeValue['id'][0]."")->first());
+
+    //    if($route->where("osm_id",'=',(string) $routeValue['id'][0])->limit(1)){
+    //     continue;
+    //    }
         
         if($routeValue->xpath('tag[@k="official_name"]') ){
 
@@ -43,25 +48,42 @@ Route::post('test', function () {
             $route->osm_id = (string) $routeValue['id'][0];
             $route->name = (string) $routeValue->xpath('tag[@k="official_name"]/@v')[0];
             $route->colour = (string) $routeValue->xpath('tag[@k="colour"]/@v')[0];  
-            //$route->save();
-            
-            //dd($route);
+            $route->save();
+
 
             $stops = $routeValue->xpath('member[@type="node"]');
 
             foreach ($stops as $stopIndex => $stopValue) {
                 $stop = new StopModel();
 
-                //search node
+                //search node in XML
                 $node = $xml->xpath('node[@id="'.(string) $stopValue["ref"][0].'"]');
+                
+                $stop->osm_id = (string) $node[0]['id'][0];
+                $stop->name = (string) $node[0]->xpath('tag[@k="name"]/@v')[0];
+                $stop->location = new Point((float) $node[0]['lat'][0], (float) $node[0]['lon'][0]);
+                $stop->save();
+                
 
-                $stop->osm_id;
+                $routeStop = new RouteStopModel();
 
-                dd($node);
+                $routeStop->route_id = $route->route_id;
+                $routeStop->stop_id = $stop->stop_id;
+                $routeStop->order_stop = $stopIndex;
+                $routeStop->save();
+
+                // dd($routeStop);
+
+
             }
 
-            dd(array_reverse($stops));
+            // dd(array_reverse($stops));
 
+            $paths = $routeValue->xpath('member[@type="way"]');
+
+            foreach ($paths as $pathIndex => $pathValue) {
+                
+            }
 
 
 
