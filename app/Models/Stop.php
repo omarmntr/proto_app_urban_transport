@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 
 class Stop extends Model
@@ -36,8 +36,8 @@ class Stop extends Model
     public $timestamps = true;
 
     
-    public function routeStop(): HasMany
+    public function routeStop(): BelongsToMany
     {
-        return $this->hasMany(RouteStop::class,'route_id', 'route_id');
+        return $this->belongsToMany(RouteStop::class,'route_id', 'route_id');
     }
 }

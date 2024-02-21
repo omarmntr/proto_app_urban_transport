@@ -4,8 +4,8 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
-// use MatanYadaev\EloquentSpatial\Objects\Point;
-// use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
+
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 
 class Route extends Model
@@ -29,4 +29,13 @@ class Route extends Model
 
 
     public $timestamps = true;
+
+    public function routeStop(): BelongsToMany
+    {
+        return $this->belongsToMany(RouteStop::class,'route_id', 'route_id');
+    }
+    public function routePath(): BelongsToMany
+    {
+        return $this->belongsToMany(RoutePath::class,'route_id', 'route_id');
+    }
 }
