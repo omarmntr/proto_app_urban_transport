@@ -82,7 +82,12 @@ Route::post('test', function () {
             $paths = $routeValue->xpath('member[@type="way"]');
 
             foreach ($paths as $pathIndex => $pathValue) {
-                
+                $path = $xml->xpath('node[@id="'.(string) $pathValue["ref"][0].'"]');
+
+                foreach ($path["nd"] as $ndIndex => $ndValue) {
+                    # code...
+                }
+
             }
 
 
