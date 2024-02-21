@@ -68,11 +68,25 @@
     
 // ]).addTo(map);
 
-        function onMapClick(e) {
-            var marker = L.marker(e.latlng).addTo(map); // Agrega un marcador en la ubicación del clic
-        }
+        // funKction onMapClick(e) {
+            // var marker = L.marker(e.latlng).addTo(map); // Agrega un marcador en la ubicación del clic
+        // }
 
-        map.on('click', onMapClick); // Agrega el evento de clic al mapa
+        // map.on('click', onMapClick); // Agrega el evento de clic al mapa
+
+        var pathCoordinates = [];
+    var path = L.polyline(pathCoordinates, {color: 'red'}).addTo(map);
+    function onMapClick(e) {
+    // Agregar un marcador al mapa en la ubicación del clic
+    var marker = L.marker(e.latlng).addTo(map);
+
+    // Agregar la ubicación del clic a la línea del camino
+    pathCoordinates.push(e.latlng);
+    path.setLatLngs(pathCoordinates);
+}
+
+// Agregar el manejador del evento de clic al mapa
+map.on('click', onMapClick);
 
     function resetFunction1() {
             // Aquí va el código para limpiar la función del Botón 1
