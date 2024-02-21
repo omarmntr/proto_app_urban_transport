@@ -22,6 +22,7 @@ class Stop extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'osm_id', //atributte id
         'name',
         'location',
     ];

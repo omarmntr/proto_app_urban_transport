@@ -22,6 +22,7 @@ class Path extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'osm_id', //atributte id
         'coordinates',
     ];
 

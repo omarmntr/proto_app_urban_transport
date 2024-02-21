@@ -33,17 +33,42 @@ Route::post('test', function () {
     foreach($routes as $routeIndex => $routeValue){
         $route = new RouteModel();
 
-        if($route){
-            dd($routeValue);
-        }
-
-         //dd(array($routeIndex, $routeValue));
-        $route->name = (string) $routeValue->xpath('tag[@k="official_name"]/@v')[0];
-        $route->colour = (string) $routeValue->xpath('tag[@k="colour"]/@v')[0];
-
+       //dd(array($routeIndex, $routeValue));
+       
         
-        if(){
-            dd($route);
+        if($routeValue->xpath('tag[@k="official_name"]') ){
+
+            
+
+            $route->osm_id = (string) $routeValue['id'][0];
+            $route->name = (string) $routeValue->xpath('tag[@k="official_name"]/@v')[0];
+            $route->colour = (string) $routeValue->xpath('tag[@k="colour"]/@v')[0];  
+            //$route->save();
+            
+            //dd($route);
+
+            $stops = $routeValue->xpath('member[@type="node"]');
+
+            foreach ($stops as $stopIndex => $stopValue) {
+                $stop = new StopModel();
+
+                //search node
+                $node = $xml->xpath('node[@id="'.(string) $stopValue["ref"][0].'"]');
+
+                $stop->osm_id;
+
+                dd($node);
+            }
+
+            dd(array_reverse($stops));
+
+
+
+
+
+        }else{
+            continue;
+            
         }
 
         //$route->save();

@@ -22,6 +22,7 @@ class Route extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'osm_id', //atributte id
         'name', //tag official_name
         'colour', //tag = colour
     ];
