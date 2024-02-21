@@ -25,10 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('test', function () {
-
-//    $stopcheckarray = array();
-  //  $routestopcheckharray = array();
+Route::post('osm_data_import', function () {
 
      set_time_limit(600);
 
@@ -36,30 +33,19 @@ Route::post('test', function () {
     $xml = simplexml_load_file(__DIR__.'\map.xml');
 
     $routes = $xml->xpath('//relation[ tag[@k = "public_transport:version" and @v="2"]]');
-
-    //dd($routes);
    
     foreach($routes as $routeIndex => $routeValue){
         
-
-        $routeCheck = RouteModel::where('osm_id', (string) $routeValue["id"][0])->first();
-
-        if($routeCheck){
-            continue;
-        }
-
         $route = new RouteModel();
         
         if(!$routeValue->xpath('tag[@k="official_name"]') ){
-            //dd($routeValue->xpath('tag[@k="official_name"]'));
             continue;
         }
-
             $route->osm_id = (string) $routeValue['id'][0];
             $route->name = (string) $routeValue->xpath('tag[@k="official_name"]/@v')[0];
             $route->colour = (string) $routeValue->xpath('tag[@k="colour"]/@v')[0];  
             $route->save();
-
+ 
 
             /* STOP INSERT BEGIN */
 
@@ -69,11 +55,7 @@ Route::post('test', function () {
 
                 $stopCheck = StopModel::where('osm_id', (string) $stopValue["ref"][0])->first();
 
-
-
                 if($stopCheck){
-
-                    //$stopcheckarray[] = $stopCheck;
 
                     $routeStopCheck = RouteStopModel::where("route_id",$route->route_id)
                     ->where('stop_id',$stopCheck->stop_id)
@@ -83,9 +65,7 @@ Route::post('test', function () {
                         continue;
                     }
 
-
                     $routeStop = new RouteStopModel();
-
                     $routeStop->route_id = $route->route_id;
                     $routeStop->stop_id = $stopCheck->stop_id;
                     $routeStop->order_stop = $stopIndex;
@@ -111,25 +91,17 @@ Route::post('test', function () {
                 $routeStop->stop_id = $stop->stop_id;
                 $routeStop->order_stop = $stopIndex;
                 $routeStop->save();
-
-                // dd($routeStop);
-
-
             }
 
             /* STOP INSERT END */
 
-            // dd(array_reverse($stops));
 
             /* PATH INSERT BEGIN */
-
             $ways = $routeValue->xpath('member[@type="way"]');
 
             foreach ($ways as $wayIndex => $wayValue) {
 
-
                 $pathCheck = PathModel::where('osm_id', (string) $wayValue["ref"][0])->first();
-
                 if($pathCheck){
 
                     $pathStopCheck = RoutePathModel::where("route_id",$route->route_id)
@@ -139,7 +111,6 @@ Route::post('test', function () {
                     if($routeStopCheck){
                         continue;
                     }
-
 
                     $routePath = new RoutePathModel();
 
@@ -153,10 +124,7 @@ Route::post('test', function () {
 
                 $path = new PathModel();
 
-               
                 $way = $xml->xpath('way[@id="'.(string) $wayValue["ref"][0].'"]');
-
-                //dd($way);
 
                 $path->osm_id = (string) $way[0]["id"][0];
 
@@ -175,8 +143,6 @@ Route::post('test', function () {
                 $path->coordinates = new MultiPoint($coordinates);
                 $path->save();
 
-
-
                 $routePath = new RoutePathModel();
 
                 $routePath->route_id = $route->route_id;
@@ -188,21 +154,6 @@ Route::post('test', function () {
 
             /* PATH INSERT END */
 
-
-
-
-        //$route->save();
-        
-        // $stop = new Stop();
-        // $stop->location = new Point((float) $node['lat'][0], (float) $node['lon'][0]);
-        // $stop->name = (string) $node->xpath('tag[@k="name"]/@v')[0];
-        
-        //$stop->save();
-
-        //return $stop->location->getCoordinates();
-
-        
-        
     }
 
     } catch (\Exception $e) {
