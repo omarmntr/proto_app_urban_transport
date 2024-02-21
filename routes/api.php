@@ -27,27 +27,33 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('test', function () {
 
-     set_time_limit(300);
+//    $stopcheckarray = array();
+  //  $routestopcheckharray = array();
+
+     set_time_limit(600);
 
     try {
     $xml = simplexml_load_file(__DIR__.'\map.xml');
 
     $routes = $xml->xpath('//relation[ tag[@k = "public_transport:version" and @v="2"]]');
+
+    //dd($routes);
    
     foreach($routes as $routeIndex => $routeValue){
-        $route = new RouteModel();
-
-       //dd(array($routeIndex, $routeValue));
-
-    //    dd($route->where("osm_id",'=',(string) $routeValue['id'][0]."")->first());
-
-    //    if($route->where("osm_id",'=',(string) $routeValue['id'][0])->limit(1)){
-    //     continue;
-    //    }
         
-        if($routeValue->xpath('tag[@k="official_name"]') ){
 
-            
+        $routeCheck = RouteModel::where('osm_id', (string) $routeValue["id"][0])->first();
+
+        if($routeCheck){
+            continue;
+        }
+
+        $route = new RouteModel();
+        
+        if(!$routeValue->xpath('tag[@k="official_name"]') ){
+            //dd($routeValue->xpath('tag[@k="official_name"]'));
+            continue;
+        }
 
             $route->osm_id = (string) $routeValue['id'][0];
             $route->name = (string) $routeValue->xpath('tag[@k="official_name"]/@v')[0];
@@ -60,6 +66,34 @@ Route::post('test', function () {
             $stops = $routeValue->xpath('member[@type="node"]');
 
             foreach ($stops as $stopIndex => $stopValue) {
+
+                $stopCheck = StopModel::where('osm_id', (string) $stopValue["ref"][0])->first();
+
+
+
+                if($stopCheck){
+
+                    //$stopcheckarray[] = $stopCheck;
+
+                    $routeStopCheck = RouteStopModel::where("route_id",$route->route_id)
+                    ->where('stop_id',$stopCheck->stop_id)
+                    ->first();
+
+                    if($routeStopCheck){
+                        continue;
+                    }
+
+
+                    $routeStop = new RouteStopModel();
+
+                    $routeStop->route_id = $route->route_id;
+                    $routeStop->stop_id = $stopCheck->stop_id;
+                    $routeStop->order_stop = $stopIndex;
+                    $routeStop->save();
+
+                    continue;
+                }
+
                 $stop = new StopModel();
 
                 //search node in XML
@@ -93,10 +127,33 @@ Route::post('test', function () {
 
             foreach ($ways as $wayIndex => $wayValue) {
 
+
+                $pathCheck = PathModel::where('osm_id', (string) $wayValue["ref"][0])->first();
+
+                if($pathCheck){
+
+                    $pathStopCheck = RoutePathModel::where("route_id",$route->route_id)
+                    ->where('path_id',$pathCheck->path_id)
+                    ->first();
+
+                    if($routeStopCheck){
+                        continue;
+                    }
+
+
+                    $routePath = new RoutePathModel();
+
+                    $routePath->route_id = $route->route_id;
+                    $routePath->path_id = $pathCheck->path_id;
+                    $routePath->order_path = $wayIndex;
+                    $routePath->save();
+
+                    continue;
+                }
+
                 $path = new PathModel();
 
-                //dd($wayValue["ref"][0]);
-
+               
                 $way = $xml->xpath('way[@id="'.(string) $wayValue["ref"][0].'"]');
 
                 //dd($way);
@@ -134,11 +191,6 @@ Route::post('test', function () {
 
 
 
-        }else{
-            continue;
-            
-        }
-
         //$route->save();
         
         // $stop = new Stop();
@@ -149,12 +201,18 @@ Route::post('test', function () {
 
         //return $stop->location->getCoordinates();
 
-        return "everything well done";
+        
         
     }
+
     } catch (\Exception $e) {
-        return $e->getMessage();
+        $return = ["errorMessage"=>$e->getMessage(),
+            "errorTrace"=>$e->getTrace()];
+
+        return $return;
     }
+
+    return "everything well done";
 });
 
 
