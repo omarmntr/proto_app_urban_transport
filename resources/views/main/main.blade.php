@@ -46,26 +46,39 @@
     </div>
   
 
-
+<script src="{{ asset('/jquery-3.7.1.min.js') }}"></script>
 <script src="{{ asset('/leaflet/leaflet.js') }}"></script>
 <script>
-    let map = L.map('map').setView([8.2757,-62.7594],13);
+    let map = L.map('map').setView([8.258907987654922,-62.77459947679567],13);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-        var pathCoordinates = [];
+    
+    //FOR AJAX REQUEST
+    var response;
+
+    var stops = [];
+    var paths = [];
+
+
+    var pathCoordinates = [];
     var path = L.polyline(pathCoordinates, {color: 'red'}).addTo(map);
+
+
+    renderAllStops();
+
+    renderAllPaths();
+
     function onMapClick(e) {
-    // Agregar un marcador al mapa en la ubicación del clic
-    var marker = L.marker(e.latlng).addTo(map);
+        // Agregar un marcador al mapa en la ubicación del clic
+        var marker = L.marker(e.latlng).addTo(map);
 
-    // Agregar la ubicación del clic a la línea del camino
-    pathCoordinates.push(e.latlng);
-    path.setLatLngs(pathCoordinates);
-}
-
-// Agregar el manejador del evento de clic al mapa
-map.on('click', onMapClick);
+        // Agregar la ubicación del clic a la línea del camino
+        pathCoordinates.push(e.latlng);
+        path.setLatLngs(pathCoordinates);
+    }
+    // Agregar el manejador del evento de clic al mapa
+    //map.on('click', onMapClick);
 
     function resetFunction1() {
             // Aquí va el código para limpiar la función del Botón 1
@@ -82,6 +95,42 @@ map.on('click', onMapClick);
     }
 
     function renderAllStops() {
+        ajax( '{{config('app.url')}}'+'/api/stop' ,'GET',function callback(response) {
+            this.stops = response;    
+        });
+        
+        stops.forEach( function(item, index, arr){
+            item.marker = L.marker([item.location.coordinates[1],item.location.coordinates[0]]).addTo(map).bindPopup(item.name).bindTooltip(item.name);
+            arr[index] = item;
+
+        });
+        
+    }
+
+    function renderAllPaths() {
+        ajax( '{{config('app.url')}}'+'/api/path' ,'GET',function callback(response) {
+            this.paths = response;    
+        });
+        //console.log(paths);
+
+        paths.forEach(function(pathItem,pathIndex,pathArr){
+            pathItem.polyline = null; 
+            pathItem.coordinates.coordinates.forEach(function(coordItem, coordIndex, coordArr){
+                coordArr[coordIndex] = coordArr[coordIndex].reverse()
+            })
+
+            pathItem.polyline = L.polyline(pathItem.coordinates.coordinates, {color: 'red'}).addTo(map);
+        })
+
+        console.log(paths);
+
+        //L.polyline(pathCoordinates, {color: 'red'}).addTo(map);
+        
+        //stops.forEach( function(item, index, arr){
+            //item.marker = L.marker([item.location.coordinates[1],item.location.coordinates[0]]).addTo(map).bindPopup(item.name).bindTooltip(item.name);
+            //arr[index] = item;
+
+        //});
         
     }
 
@@ -111,6 +160,24 @@ map.on('click', onMapClick);
 
     function clearLastStop(){
         
+    }
+
+    function ajax(url, type = 'GET',callback){
+        
+        $.ajax({
+				 url:url,
+    			 type:type,
+                 async:false,
+				 success: function(response) {
+            // For example, filter the response
+                callback(response.data);
+        },
+				 error: function(){
+					 console.log("no fue posible completar la operacion");
+				 }
+			 }).done(function (response){
+                return response.data;
+             });
     }
 
 </script>
