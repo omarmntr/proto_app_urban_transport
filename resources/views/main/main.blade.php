@@ -17,11 +17,15 @@
             </div>
 
             <div class="button-container">
-                <button id="btn1">Botón 1</button>
+                <button id="initialStopBTN" onclick="clickInitialStopBTN()">
+                    <h5 id="initialStopName">Select Initial Stop</h5>
+                </button>
                 <button class="reset-button" onclick="resetFunction1()">Limpiar</button>
             </div>
             <div class="button-container">
-                <button id="btn2">Botón 2</button>
+                <button id="finalStopBTN" onclick="clickFinalStopBTN()">
+                    <h5 id="finalStopName">Select Final Stop</h5>
+                </button>
                 <button class="reset-button" onclick="resetFunction2()">Limpiar</button>
             </div>
             
@@ -60,6 +64,12 @@
     var stops = [];
     var paths = [];
 
+    var initialStop = "Select Initial Stop";
+    var initialStopFlag = false;
+
+    var finalStop = "Select Final Stop";
+    var finalStopFlag = false;
+
 
     var pathCoordinates = [];
     var path = L.polyline(pathCoordinates, {color: 'red'}).addTo(map);
@@ -80,6 +90,8 @@
     // Agregar el manejador del evento de clic al mapa
     //map.on('click', onMapClick);
 
+    
+
     function resetFunction1() {
             // Aquí va el código para limpiar la función del Botón 1
         }
@@ -99,12 +111,41 @@
             this.stops = response;    
         });
         
-        stops.forEach( function(item, index, arr){
+        this.stops.forEach( function(item, index, arr){
             item.marker = L.marker([item.location.coordinates[1],item.location.coordinates[0]]).addTo(map).bindPopup(item.name).bindTooltip(item.name);
+            item.marker.stop_array_id = index;
+            item.marker.addEventListener('click', e => {
+
+                if(this.initialStopFlag == true){
+                    this.initialStop =  arr[e.target.stop_array_id]
+                    document.getElementById("initialStopName").innerHTML = this.initialStop.name;
+                }
+
+                if(this.finalStopFlag == true){
+                    this.finalStop =  arr[e.target.stop_array_id]
+                    document.getElementById("finalStopName").innerHTML = this.finalStop.name;
+                }
+
+                
+            })
             arr[index] = item;
 
         });
         
+    }
+
+    function clickInitialStopBTN(e){
+        this.initialStopFlag = true;
+        this.finalStopFlag = false;
+
+        console.log([this.initialStopFlag, this.finalStopFlag])
+    }
+
+    function clickFinalStopBTN(e){
+        this.finalStopFlag = true;
+        this.initialStopFlag = false;
+
+        console.log([this.initialStopFlag, this.finalStopFlag])
     }
 
     function renderAllPaths() {
@@ -122,7 +163,7 @@
             pathItem.polyline = L.polyline(pathItem.coordinates.coordinates, {color: 'red'}).addTo(map);
         })
 
-        console.log(paths);
+        //console.log(paths);
 
         //L.polyline(pathCoordinates, {color: 'red'}).addTo(map);
         
