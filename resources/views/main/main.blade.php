@@ -17,31 +17,36 @@
             </div>
 
             <div class="button-container">
-                <button id="initialStopBTN" onclick="clickInitialStopBTN()">
-                    <h5 id="initialStopName">Select Initial Stop</h5>
-                </button>
                 <button class="reset-button" onclick="clearInitialStop()">
                     <h5>X</h5>
                 </button>
-            </div>
-            <div class="button-container">
-                <button id="finalStopBTN" onclick="clickFinalStopBTN()">
-                    <h5 id="finalStopName">Select Final Stop</h5>
+
+                <button id="initialStopBTN" onclick="clickInitialStopBTN()">
+                    <h5 id="initialStopName">Seleccionar Parada Inicial</h5>
                 </button>
+                
+            </div>
+
+            <div class="button-container ">
                 <button class="reset-button" onclick="clearFinalStop()">
                     <h5>X</h5>
                 </button>
+
+                <button id="finalStopBTN" onclick="clickFinalStopBTN()">
+                    <h5 id="finalStopName">Seleccionar Parada Final</h5>
+                </button>
+                
             </div>
             
 
             <div class="container-clear-calculate">
                 <div style="text-align: center;" class="button-clear">
-                    <button id="clearBTN" onclick="clearAll()">limpiar </button>
+                    <button id="clearBTN" onclick="clearAll()">Limpiar</button>
                     <!-- <button onclick="">limpiar informacion</button> -->
                     
                 </div>
                 <div style="text-align: center;" class="button-calculate">
-                    <button id="calculateBTN" onclick="calculateOptimalRoute()">buscar</button>
+                    <button id="calculateBTN" onclick="calculateOptimalRoute()">Calcular</button>
                     <!-- <button onclick="">buscar</button> -->
 
                 </div>
@@ -78,10 +83,10 @@
     var pathPolyline = null;
     
     //FOR ROUTE CALCULATION
-    var initialStop = "Select Initial Stop";
+    var initialStop = "Seleccionar Parada Inicial";
     var initialStopFlag = false;
 
-    var finalStop = "Select Final Stop";
+    var finalStop = "Seleccionar Parada Final";
     var finalStopFlag = false;
 
 
@@ -183,23 +188,23 @@
     function clearInitialStop(){
         this.initialStopFlag = false;
         this.initialStop = null;
-        document.getElementById("initialStopName").innerHTML = "Select Initial Stop";
+        document.getElementById("initialStopName").innerHTML = "Seleccionar Parada Inicial";
     }
 
     function clearFinalStop(){
         this.finalStopFlag = false;
         this.finalStop = null;
-        document.getElementById("finalStopName").innerHTML = "Select Final Stop";
+        document.getElementById("finalStopName").innerHTML = "Seleccionar Parada Final";
     }
 
     function clearAll(){
         this.initialStopFlag = false;
         this.initialStop = null;
-        document.getElementById("initialStopName").innerHTML = "Select Initial Stop";
+        document.getElementById("initialStopName").innerHTML = "Seleccionar Parada Inicial";
 
         this.finalStopFlag = false;
         this.finalStop = null;
-        document.getElementById("finalStopName").innerHTML = "Select Final Stop";
+        document.getElementById("finalStopName").innerHTML = "Seleccionar Parada Final";
 
         this.calculatedRoute = [];
         this.calculatedPath = [];
@@ -307,6 +312,7 @@
             width: 100%;
         }  
         .button-container {
+            display: flex; 
             position: relative;
             width: 100%;
             margin-bottom: 10px;
@@ -320,11 +326,11 @@
             width: 100%;
         }
         /* Colores de los botones principales */
-        #btn1 {
-            background-color: red;
+        #initialStopBTN {
+            background-color: #c70575;
         }
-        #btn2 {
-            background-color: green;
+        #finalStopBTN {
+            background-color: #05c76c;
         }
 
         .logo{
@@ -350,29 +356,26 @@
             flex: 70%;
         }
         
-        #btn4 {
+        #calculateBTN {
             
-            background-color: #f6ff33;
+            background-color: #bedf2e;
             height: 90%; /* Altura del botón  */
             width: 90%;
             
         }
-        #btn5 {
-            background-color: #33f6ff ;
+        #clearBTN {
+            background-color: #2e7ddf ;
             height: 90%; /* Altura del botón  */
             width:90%;
             
         }
         /* Botón de reinicio */
         .reset-button {
-            position: absolute;
-            top: 0;
-            left: 0; /* Ubicación a la izquierda */
-            padding: 2px; /* Tamaño más pequeño */
-            font-size: 8px; /* Tamaño de fuente más pequeño */
-            background-color: black;
-            height: 20px; /* Altura del botón  */
-            width: 20%; /* Ancho del botón  */
+            
+           
+            font-size: 20px; /* Tamaño de fuente más pequeño */
+            background-color: black; 
+            flex: 20%;
         }   
 </style>
 </html>
