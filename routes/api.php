@@ -18,6 +18,11 @@ use App\Http\Controllers\StopController;
  */
 use App\Http\Controllers\PathController;
 
+/**
+ * PATH CONTROLLER
+ */
+use App\Http\Controllers\RouteController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +68,5 @@ Route::prefix('path')->group(function () {
  * ROUTE CALCULATE
  */
 Route::prefix('calculate')->group(function () {
-    Route::get('route/{initilaStop}/{}}', [PathController::class, 'read']);
-    Route::get('/{path_id}', [PathController::class, 'readById']);
+    Route::get('/route/{initilaStop}/{finalStop}', [RouteController::class, 'calculateRoute']);
 });

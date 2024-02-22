@@ -37,6 +37,6 @@ class RouteStop extends Model
 
     public function stop(): HasMany
     {
-        return $this->hasManyThrough(Stop::class,'path_id', 'path_id');
+        return $this->hasMany(Stop::class,'stop_id', 'stop_id');
     }
 }
