@@ -13,7 +13,8 @@
         <div class="left">
 
             <div class="logo">
-                <button id="btn3">Logo</button>  
+                <!-- <button id="btn3">Logo</button>   -->
+                <img id="logo" src="2024.png">
             </div>
 
             <div class="button-container">
@@ -100,7 +101,7 @@
 
     renderAllStops();
 
-    //renderAllPaths();
+    // renderAllPaths();
 
     
 
@@ -327,23 +328,23 @@
         }
         /* Colores de los botones principales */
         #initialStopBTN {
-            background-color: #c70575;
+            background-color: #82b1ec;
         }
         #finalStopBTN {
-            background-color: #05c76c;
+            background-color: #82b1ec;
         }
 
         .logo{
             position: relative;
-            width: 25%;
-            height: 25%;
-            padding-bottom: 10%;
+            margin-bottom: 25%;
+
         }
-        #btn3 {
-            background-color: blue;
-            position: absolute;
-            top: 0;
-            left: 0;
+        #logo {
+            
+            width: 100px;
+            height: 100px;
+            /* top: 0%; */
+            /* left: 0%; */
         }
 
         .container-clear-calculate{
@@ -351,9 +352,11 @@
         }
         .button-clear{
             flex: 30%;
+         
         }
         .button-calculate{
             flex: 70%;
+          
         }
         
         #calculateBTN {
@@ -361,13 +364,13 @@
             background-color: #bedf2e;
             height: 90%; /* Altura del botón  */
             width: 90%;
-            
+            border-radius:50%;
         }
         #clearBTN {
-            background-color: #2e7ddf ;
+            background-color: red ;
             height: 90%; /* Altura del botón  */
             width:90%;
-            
+            border-radius:50%50%;     
         }
         /* Botón de reinicio */
         .reset-button {
