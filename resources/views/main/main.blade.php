@@ -78,7 +78,7 @@
      */
     var map = L.map('map').setView([8.258907987654922,-62.77459947679567],13);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
     
     //FOR AJAX REQUEST
@@ -87,12 +87,12 @@
     //FOR RENDERING
 
     var greenMarker = L.icon({
-        iconUrl: "{{ asset('/marker-icon-green.png') }}",
+        iconUrl: "{{ asset('/green-marker.png') }}",
         shadowUrl: "{{ asset('/leafelt/images/marker-shadow.png') }}",
     });
 
     var redMarker = L.icon({
-        iconUrl: "{{ asset('/marker-icon-red.png') }}",
+        iconUrl: "{{ asset('/red-marker.png') }}",
         shadowUrl: "{{ asset('/leafelt/images/marker-shadow.png') }}",
     });
 
@@ -109,10 +109,10 @@
     var pathPolyline = null;
     
     //FOR ROUTE CALCULATION
-    var initialStop = "Seleccionar Parada Inicial";
+    var initialStop = null;
     var initialStopFlag = false;
 
-    var finalStop = "Seleccionar Parada Final";
+    var finalStop = null;
     var finalStopFlag = false;
 
 
@@ -126,7 +126,7 @@
 
     renderAllStops();
 
-    //renderAllPaths();
+    renderAllPaths();
 
     
 
@@ -140,7 +140,7 @@
         });
         
         this.stops.forEach( function(item, index, arr){
-            item.marker = L.marker([item.location.coordinates[1],item.location.coordinates[0]]).addTo(map).bindPopup(item.name).bindTooltip(item.name);
+            item.marker = L.marker(item.location.coordinates).addTo(this.map).bindPopup(item.name).bindTooltip(item.name);
             item.marker.stop_array_id = index;
             item.marker.addEventListener('click', e => {
 
@@ -191,11 +191,11 @@
 
         paths.forEach(function(pathItem,pathIndex,pathArr){
             pathItem.polyline = null; 
-            pathItem.coordinates.coordinates.forEach(function(coordItem, coordIndex, coordArr){
-                coordArr[coordIndex] = coordArr[coordIndex].reverse()
-            })
+            // pathItem.coordinates.coordinates.forEach(function(coordItem, coordIndex, coordArr){
+            //     coordArr[coordIndex] = coordArr[coordIndex].reverse()
+            // })
 
-            pathItem.polyline = L.polyline(pathItem.coordinates.coordinates, {color: 'red'}).addTo(map);
+            pathItem.polyline = L.polyline(pathItem.coordinates.coordinates, {color: 'red'}).addTo(this.map);
         })
   
     }
@@ -216,7 +216,7 @@
 
         })
 
-        this.pathPolyline = L.polyline(this.calculatedPath, {color: 'red'}).addTo(map);   
+        this.pathPolyline = L.polyline(this.calculatedPath, {color: 'red'}).addTo(this.map);   
         
     }
 
