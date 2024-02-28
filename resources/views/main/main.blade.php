@@ -62,6 +62,20 @@
 
                 </div>
             </div>
+
+            <div class = "result-container">
+                <!-- RouteName -->
+                <h4 id = "routeNameTittle">Ruta Calculada:</h4>
+                <h5 id = "routeNameContent"></h5>
+                
+                <h4 id = "probableTravlingTimeTittle">Tiempo De Viaje Probable:</h4>
+                <h5 id = "probableTravlingTimeContent"></h5>
+                
+                <h4 id = "totalFareTitle">Pasajes A Pagar:</h4>
+                <h5 id = "totalFareContent"></h5>
+                
+            </div>
+
         </div>
 
         <!-- MAP -->
