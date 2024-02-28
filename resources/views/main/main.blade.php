@@ -4,7 +4,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PAUT</title>
 
-    <link rel="stylesheet" href="{{ asset('/leaflet/leaflet.css') }}" />
+    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/> -->
+      <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <!-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script> -->
+    
+     <link rel="stylesheet" href="{{ asset('/leaflet/leaflet.css') }}" />
+    <script src="{{ asset('/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('/leaflet/leaflet.js') }}"></script>
          
 </head>
 <body>
@@ -60,8 +70,7 @@
     </div>
   
 
-<script src="{{ asset('/jquery-3.7.1.min.js') }}"></script>
-<script src="{{ asset('/leaflet/leaflet.js') }}"></script>
+
 <script>
 
     /**
@@ -77,20 +86,20 @@
 
     //FOR RENDERING
 
-    // var greenMarker = L.icon({
-    //     iconUrl: "{{ asset('/leafelt/images/marker-icon-green.png') }}",
-    //     shadowUrl: "{{ asset('/leafelt/images/marker-shadow.png') }}",
-    // });
+    var greenMarker = L.icon({
+        iconUrl: "{{ asset('/marker-icon-green.png') }}",
+        shadowUrl: "{{ asset('/leafelt/images/marker-shadow.png') }}",
+    });
 
-    // var redMarker = L.icon({
-    //     iconUrl: "{{ asset('/leafelt/images/marker-icon-red.png') }}",
-    //     shadowUrl: "{{ asset('/leafelt/images/marker-shadow.png') }}",
-    // });
+    var redMarker = L.icon({
+        iconUrl: "{{ asset('/marker-icon-red.png') }}",
+        shadowUrl: "{{ asset('/leafelt/images/marker-shadow.png') }}",
+    });
 
-    // var defaultMarker = L.icon({
-    //     iconUrl: "{{ asset('/leafelt/images/marker-icon.png') }}",
-    //     shadowUrl: "{{ asset('/leafelt/images/marker-shadow.png') }}",
-    // })
+    var defaultMarker = L.icon({
+        iconUrl: "{{ asset('/leafelt/images/marker-icon.png') }}",
+        shadowUrl: "{{ asset('/leafelt/images/marker-shadow.png') }}",
+    })
 
     var stops = [];
     var paths = [];
@@ -138,26 +147,27 @@
                 if(this.initialStopFlag == true){
                     this.initialStop =  arr[e.target.stop_array_id]
                     document.getElementById("initialStopName").innerHTML = this.initialStop.name;
-                    //e.target.setIcon(this.greenMarker);
+                    e.target.setIcon(this.greenMarker);
                     console.log(this.initialStop);
                 }
 
                 if(this.finalStopFlag == true){
                     this.finalStop =  arr[e.target.stop_array_id]
                     document.getElementById("finalStopName").innerHTML = this.finalStop.name;
-                    //e.target.setIcon(this.redMarker);
+                    e.target.setIcon(this.redMarker);
                     console.log(this.finalStop);
                 }               
             })
             arr[index] = item;
 
-        }); 
+        });
+         console.log(this.stops[0]);
     }
 
 
     function clickInitialStopBTN(e){
         if (this.initialStop != null) {
-            //this.initialStop.setIcon(this.defaultMarker);
+            this.initialStop.setIcon(this.defaultMarker);
         }
         this.initialStopFlag = true;
         this.finalStopFlag = false;
@@ -166,7 +176,7 @@
 
     function clickFinalStopBTN(e){
         if (this.finalStop != null) {
-            //this.finalStop.setIcon(this.defaultMarker);
+            this.finalStop.setIcon(this.defaultMarker);
         }
         this.finalStopFlag = true;
         this.initialStopFlag = false;
@@ -212,26 +222,34 @@
 
     function clearInitialStop(){
         this.initialStopFlag = false;
-        //this.initialStop.marker.setIcon(this.defaultMarker);
+        if (this.initialStop != null) {
+            this.initialStop.setIcon(this.defaultMarker);
+        }
         this.initialStop = null;
         document.getElementById("initialStopName").innerHTML = "Seleccionar Parada Inicial";
     }
 
     function clearFinalStop(){
         this.finalStopFlag = false;
-        //this.finalStop.marker.setIcon(this.defaultMarker);
+        if (this.finalStop != null) {
+            this.finalStop.setIcon(this.defaultMarker);
+        }
         this.finalStop = null;
         document.getElementById("finalStopName").innerHTML = "Seleccionar Parada Final";
     }
 
     function clearAll(){
         this.initialStopFlag = false;
-        //this.initialStop.marker.setIcon(this.defaultMarker);
+        if (this.initialStop != null) {
+            this.initialStop.setIcon(this.defaultMarker);
+        }
         this.initialStop = null;
         document.getElementById("initialStopName").innerHTML = "Seleccionar Parada Inicial";
 
         this.finalStopFlag = false;
-        //this.finalStop.marker.setIcon(this.defaultMarker);
+        if (this.finalStop != null) {
+            this.finalStop.setIcon(this.defaultMarker);
+        }
         this.finalStop = null;
         document.getElementById("finalStopName").innerHTML = "Seleccionar Parada Final";
 
