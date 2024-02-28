@@ -26,6 +26,8 @@ class RouteController extends Controller
 
                 $time_total = (float) $time_between_stops->value + (float) $time_in_stop->value;
                 
+                $time_total_segmnt = null;
+                
                 $routeCalculated = null;
 
                 $result_direct = 0.0; 
@@ -55,22 +57,24 @@ class RouteController extends Controller
                     ->get();
 
                     $num_segmt = count($routeStopSegment) - 1;
-
-                    
+ 
+                    $time_total_segmnt = $num_segmt * $time_total;
 
                     if( $result_direct == 0.0){
                         $data = collect(["route"=>$routeStopSegment,
-                                        "approximate_travel_time"=>$num_segmt * $time_total]);
+                                        "approximate_travel_time"=>$time_total_segmnt,
+                                        "fares" => 1]);
                         
 
-                        $result_direct = $num_segmt * $time_total;
+                        $result_direct = $time_total_segmnt;
                     }
                     
                     if( $result_direct > ($num_segmt * $time_total)){
                        $data = collect(["route"=>$routeStopSegment,
-                                       "approximate_travel_time"=>$num_segmt * $time_total >= $result_direct]);
+                                       "approximate_travel_time"=>$time_total_segmnt >= $result_direct,
+                                       "fares" => 1]);
 
-                        $result_direct = $num_segmt * $time_total;
+                        $result_direct = $time_total_segmnt;
                     }              
                 }
 
