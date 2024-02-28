@@ -117,7 +117,7 @@
 
     renderAllStops();
 
-    renderAllPaths();
+    //renderAllPaths();
 
     
 
@@ -129,13 +129,9 @@
         ajax( '{{config('app.url')}}'+'/api/stop' ,'GET',function callback(response) {
             this.stops = response;    
         });
-        //console.log(this.stops);
+        
         this.stops.forEach( function(item, index, arr){
-            
-            console.log(item);
-            console.log('this is after item');
-            item.marker = L.marker([item.location.coordinates[1],item.location.coordinates[0]]/*,{icon:this.defaultMarker}*/).addTo(map).bindPopup(item.name).bindTooltip(item.name);
-            //console.log(item.marker);
+            item.marker = L.marker([item.location.coordinates[1],item.location.coordinates[0]]).addTo(map).bindPopup(item.name).bindTooltip(item.name);
             item.marker.stop_array_id = index;
             item.marker.addEventListener('click', e => {
 
@@ -384,11 +380,9 @@
         }
         .button-clear{
             flex: 30%;
-         
         }
         .button-calculate{
             flex: 70%;
-          
         }
         
         #calculateBTN {
