@@ -77,20 +77,20 @@
 
     //FOR RENDERING
 
-    var greenMarker = L.icon({
-        iconUrl: {{'/leafelt/images/marker-icon-green.png'}},
-        shadowUrl:{{'/leafelt/images/marker-shadow.png'}},
-    });
+    // var greenMarker = L.icon({
+    //     iconUrl: "{{ asset('/leafelt/images/marker-icon-green.png') }}",
+    //     shadowUrl: "{{ asset('/leafelt/images/marker-shadow.png') }}",
+    // });
 
-    var redMarker = L.icon({
-        iconUrl: {{'/leafelt/images/marker-icon-red.png'}},
-        shadowUrl:{{'/leafelt/images/marker-shadow.png'}},
-    });
+    // var redMarker = L.icon({
+    //     iconUrl: "{{ asset('/leafelt/images/marker-icon-red.png') }}",
+    //     shadowUrl: "{{ asset('/leafelt/images/marker-shadow.png') }}",
+    // });
 
-    var defaultMarker = L.icon({
-        iconUrl: {{'/leafelt/images/marker-icon.png'}},
-        shadowUrl:{{'/leafelt/images/marker-shadow.png'}},
-    })
+    // var defaultMarker = L.icon({
+    //     iconUrl: "{{ asset('/leafelt/images/marker-icon.png') }}",
+    //     shadowUrl: "{{ asset('/leafelt/images/marker-shadow.png') }}",
+    // })
 
     var stops = [];
     var paths = [];
@@ -115,9 +115,9 @@
      * MAIN EXECUTION
      */
 
-    //renderAllStops();
+    renderAllStops();
 
-    // renderAllPaths();
+    renderAllPaths();
 
     
 
@@ -129,23 +129,27 @@
         ajax( '{{config('app.url')}}'+'/api/stop' ,'GET',function callback(response) {
             this.stops = response;    
         });
-        
+        //console.log(this.stops);
         this.stops.forEach( function(item, index, arr){
-            item.marker = L.marker([item.location.coordinates[1],item.location.coordinates[0]]).addTo(map).bindPopup(item.name).bindTooltip(item.name);
+            
+            console.log(item);
+            console.log('this is after item');
+            item.marker = L.marker([item.location.coordinates[1],item.location.coordinates[0]]/*,{icon:this.defaultMarker}*/).addTo(map).bindPopup(item.name).bindTooltip(item.name);
+            //console.log(item.marker);
             item.marker.stop_array_id = index;
             item.marker.addEventListener('click', e => {
 
                 if(this.initialStopFlag == true){
                     this.initialStop =  arr[e.target.stop_array_id]
                     document.getElementById("initialStopName").innerHTML = this.initialStop.name;
-                    e.target.setIcon(this.greenMarker);
+                    //e.target.setIcon(this.greenMarker);
                     console.log(this.initialStop);
                 }
 
                 if(this.finalStopFlag == true){
                     this.finalStop =  arr[e.target.stop_array_id]
                     document.getElementById("finalStopName").innerHTML = this.finalStop.name;
-                    e.target.setIcon(this.redMarker);
+                    //e.target.setIcon(this.redMarker);
                     console.log(this.finalStop);
                 }               
             })
@@ -157,7 +161,7 @@
 
     function clickInitialStopBTN(e){
         if (this.initialStop != null) {
-            this.initialStop.setIcon(this.defaultMarker);
+            //this.initialStop.setIcon(this.defaultMarker);
         }
         this.initialStopFlag = true;
         this.finalStopFlag = false;
@@ -166,7 +170,7 @@
 
     function clickFinalStopBTN(e){
         if (this.finalStop != null) {
-            this.finalStop.setIcon(this.defaultMarker);
+            //this.finalStop.setIcon(this.defaultMarker);
         }
         this.finalStopFlag = true;
         this.initialStopFlag = false;
@@ -212,26 +216,26 @@
 
     function clearInitialStop(){
         this.initialStopFlag = false;
-        this.initialStop.marker.setIcon(this.defaultMarker);
+        //this.initialStop.marker.setIcon(this.defaultMarker);
         this.initialStop = null;
         document.getElementById("initialStopName").innerHTML = "Seleccionar Parada Inicial";
     }
 
     function clearFinalStop(){
         this.finalStopFlag = false;
-        this.finalStop.marker.setIcon(this.defaultMarker);
+        //this.finalStop.marker.setIcon(this.defaultMarker);
         this.finalStop = null;
         document.getElementById("finalStopName").innerHTML = "Seleccionar Parada Final";
     }
 
     function clearAll(){
         this.initialStopFlag = false;
-        this.initialStop.marker.setIcon(this.defaultMarker);
+        //this.initialStop.marker.setIcon(this.defaultMarker);
         this.initialStop = null;
         document.getElementById("initialStopName").innerHTML = "Seleccionar Parada Inicial";
 
         this.finalStopFlag = false;
-        this.finalStop.marker.setIcon(this.defaultMarker);
+        //this.finalStop.marker.setIcon(this.defaultMarker);
         this.finalStop = null;
         document.getElementById("finalStopName").innerHTML = "Seleccionar Parada Final";
 
