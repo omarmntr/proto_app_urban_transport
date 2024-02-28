@@ -88,17 +88,19 @@
 
     var greenMarker = L.icon({
         iconUrl: "{{ asset('/green-marker.png') }}",
-        shadowUrl: "{{ asset('/leafelt/images/marker-shadow.png') }}",
+        iconSize: [38, 48],
+       // shadowUrl: "{{ asset('/leafelt/images/marker-shadow.png') }}",
     });
 
     var redMarker = L.icon({
         iconUrl: "{{ asset('/red-marker.png') }}",
-        shadowUrl: "{{ asset('/leafelt/images/marker-shadow.png') }}",
+        iconSize: [48, 48],
+       // shadowUrl: "{{ asset('/leafelt/images/marker-shadow.png') }}",
     });
 
     var defaultMarker = L.icon({
         iconUrl: "{{ asset('/leafelt/images/marker-icon.png') }}",
-        shadowUrl: "{{ asset('/leafelt/images/marker-shadow.png') }}",
+       // shadowUrl: "{{ asset('/leafelt/images/marker-shadow.png') }}",
     })
 
     var stops = [];
@@ -126,7 +128,7 @@
 
     renderAllStops();
 
-    renderAllPaths();
+    //renderAllPaths();
 
     
 
@@ -140,7 +142,7 @@
         });
         
         this.stops.forEach( function(item, index, arr){
-            item.marker = L.marker(item.location.coordinates).addTo(this.map).bindPopup(item.name).bindTooltip(item.name);
+            item.marker = L.marker(item.location.coordinates.reverse()).addTo(this.map).bindPopup(item.name).bindTooltip(item.name);
             item.marker.stop_array_id = index;
             item.marker.addEventListener('click', e => {
 
@@ -195,7 +197,7 @@
             //     coordArr[coordIndex] = coordArr[coordIndex].reverse()
             // })
 
-            pathItem.polyline = L.polyline(pathItem.coordinates.coordinates, {color: 'red'}).addTo(this.map);
+            pathItem.polyline = L.polyline(pathItem.coordinates.coordinates.reverse(), {color: 'red'}).addTo(this.map);
         })
   
     }
